@@ -1,0 +1,7 @@
+# 环境变量文件（含 API Key，绝对不能上传）
+.env
+.env.local
+
+# 系统文件
+.DS_Store
+Thumbs.db

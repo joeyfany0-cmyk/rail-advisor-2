@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>铁道从业者职业转型顾问</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#E8A020;--amber-l:#F5C842;
+  --steel-l:#3D4E62;--steel-d:#161D28;
+  --con:#8B9099;--con-l:#C4CAD1;
+  --red:#C0392B;--teal-l:#2DC99E;
+  --wh:#F2F0EB;--owh:#E8E5DE;
+  --ds:#4D6BFE;--ds-l:#7B93FF;
+  --pay-green:#00B578;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--steel-d);color:var(--wh);font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;font-weight:300;min-height:100vh}
+.track-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.track-bg svg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);opacity:.05;width:600px}
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 24px 80px}
+header{padding:40px 0 24px;border-bottom:1px solid rgba(232,160,32,.2);margin-bottom:28px}
+.logo-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.logo-box{width:32px;height:32px;background:var(--amber);border-radius:4px;display:flex;align-items:center;justify-content:center}
+.logo-box svg{width:18px;height:18px;fill:var(--steel-d)}
+.logo-txt{font-size:11px;font-weight:600;letter-spacing:.15em;color:var(--amber)}
+.pw-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--con);margin-left:10px;padding:3px 9px;border:1px solid rgba(77,107,254,.3);border-radius:20px;background:rgba(77,107,254,.07)}
+.pw-badge span{color:var(--ds-l);font-weight:500}
+h1{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:700;line-height:1.3;margin-bottom:5px}
+.sub{font-size:13px;color:var(--con);line-height:1.6}
+
+/* Payment gate */
+#pay-gate{animation:fi .4s ease}
+.pay-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:32px 28px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.pay-title{font-family:'Noto Serif SC',serif;font-size:20px;font-weight:700;text-align:center}
+.pay-price-row{display:flex;align-items:baseline;gap:4px}
+.pay-price{font-size:42px;font-weight:700;color:var(--amber);font-family:'JetBrains Mono',monospace}
+.pay-price-unit{font-size:16px;color:var(--con-l)}
+.pay-features{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;font-size:13px;color:var(--con-l)}
+.pay-features li::before{content:"✓ ";color:var(--pay-green)}
+.qr-box{background:white;border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.qr-img{width:180px;height:180px;object-fit:contain;display:block;border-radius:4px}
+.qr-placeholder{width:180px;height:180px;background:#f5f5f5;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;border:2px dashed #ccc}
+.qr-placeholder svg{width:40px;height:40px;fill:#bbb}
+.qr-placeholder p{font-size:11px;color:#999;text-align:center;line-height:1.4}
+.qr-label{font-size:13px;font-weight:600;color:#1677FF;letter-spacing:.04em}
+.qr-amount{font-size:15px;font-weight:700;color:#E8A020}
+.unlock-section{width:100%;max-width:360px}
+.unlock-label{font-size:12px;color:var(--con-l);margin-bottom:8px;display:block;text-align:center}
+.unlock-row{display:flex;gap:10px}
+.unlock-row input{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);border-radius:6px;color:var(--wh);font-size:15px;font-family:'JetBrains Mono',monospace;padding:11px 14px;outline:none;letter-spacing:.2em;text-align:center;transition:border-color .2s}
+.unlock-row input:focus{border-color:var(--amber)}
+.unlock-btn{padding:11px 20px;background:var(--amber);border:none;border-radius:6px;color:var(--steel-d);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.unlock-btn:hover{background:var(--amber-l)}
+.unlock-err{font-size:12px;color:#F5A89A;text-align:center;margin-top:8px;min-height:18px}
+.unlock-hint{font-size:11px;color:var(--con);text-align:center;margin-top:10px;line-height:1.6}
+
+/* Form */
+#form-area{display:none}
+.steps{display:flex;gap:6px;margin-bottom:28px}
+.dot{width:20px;height:4px;background:var(--steel-l);border-radius:2px;transition:background .3s}
+.dot.on{background:var(--amber)}.dot.ok{background:var(--teal-l)}
+.slabel{font-size:11px;font-weight:500;letter-spacing:.15em;color:var(--amber);margin-bottom:5px}
+.stitle{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;margin-bottom:18px}
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:12px;font-weight:500;color:var(--con-l);margin-bottom:6px}
+select,textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:var(--wh);font-size:13px;font-weight:300;padding:10px 12px;outline:none;transition:border-color .2s;font-family:inherit;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23E8A020' fill='none' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+select option{background:#1e2a38}
+select:focus,textarea:focus{border-color:var(--amber);background:rgba(232,160,32,.05)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:520px){.two-col{grid-template-columns:1fr}}
+.rrow{display:flex;align-items:center;gap:14px}
+input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--steel-l);border-radius:2px;border:none;padding:0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--amber);border-radius:50%;cursor:pointer;border:3px solid var(--steel-d)}
+.rv{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--amber);min-width:40px;text-align:right}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{padding:6px 12px;border-radius:4px;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--con-l);font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit}
+.chip:hover{border-color:rgba(232,160,32,.4);color:var(--wh)}
+.chip.on{background:rgba(232,160,32,.12);border-color:var(--amber);color:var(--amber)}
+.brow{display:flex;justify-content:space-between;align-items:center;margin-top:26px;padding-top:18px;border-top:1px solid rgba(255,255,255,.07)}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 24px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.bp{background:var(--amber);color:var(--steel-d)}.bp:hover{background:var(--amber-l);transform:translateY(-1px)}.bp:active{transform:translateY(0)}
+.bg{background:transparent;color:var(--con);border:1px solid rgba(255,255,255,.1)}.bg:hover{color:var(--wh);border-color:rgba(255,255,255,.25)}
+.pn{font-size:11px;color:var(--con)}
+
+/* Loading */
+.load-wrap{text-align:center;padding:70px 0}
+.load-rail{width:180px;height:4px;background:var(--steel-l);border-radius:2px;margin:20px auto 14px;overflow:hidden}
+.load-train{width:40%;height:100%;background:var(--ds);border-radius:2px;animation:tr 1.4s ease-in-out infinite}
+@keyframes tr{0%{transform:translateX(-100%)}100%{transform:translateX(350%)}}
+.load-txt{font-size:12px;color:var(--con);letter-spacing:.04em}
+
+/* Result */
+.res-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,.08)}
+.badge{background:rgba(77,107,254,.12);border:1px solid rgba(77,107,254,.35);color:var(--ds-l);font-size:10px;font-weight:500;letter-spacing:.1em;padding:4px 10px;border-radius:4px}
+.panel{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-left:3px solid var(--ds);border-radius:8px;padding:24px}
+.rc{line-height:1.9;font-size:14px;color:var(--owh)}
+.rc h2{font-family:'Noto Serif SC',serif;font-size:15px;font-weight:600;color:var(--amber);margin:22px 0 10px;padding-bottom:5px;border-bottom:1px solid rgba(232,160,32,.15)}
+.rc h3{font-family:'Noto Serif SC',serif;font-size:14px;font-weight:600;color:var(--con-l);margin:14px 0 6px}
+.rc p{margin-bottom:10px}
+.rc ul,.rc ol{padding-left:18px;margin-bottom:10px}
+.rc li{margin-bottom:5px}
+.rc strong{color:var(--amber-l);font-weight:500}
+.rc em{color:var(--teal-l);font-style:normal}
+.rc code{font-size:12px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:3px;color:var(--ds-l);font-family:'JetBrains Mono',monospace}
+.usage-bar{font-size:11px;color:var(--con);margin-top:14px;font-family:'JetBrains Mono',monospace}
+.usage-bar span{color:var(--ds-l)}
+.rt{margin-top:28px;text-align:center;padding-top:18px;border-top:1px solid rgba(255,255,255,.07)}
+.err{background:rgba(192,57,43,.1);border:1px solid rgba(192,57,43,.3);border-radius:6px;padding:12px 16px;color:#F5A89A;font-size:12px;margin-top:14px;line-height:1.6}
+
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fi{animation:fi .35s ease forwards}
+</style>
+</head>
+<body>
+
+<div class="track-bg">
+  <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <line x1="60" y1="0" x2="60" y2="300" stroke="white" stroke-width="6"/>
+    <line x1="340" y1="0" x2="340" y2="300" stroke="white" stroke-width="6"/>
+    <line x1="50" y1="30"  x2="350" y2="30"  stroke="white" stroke-width="3"/>
+    <line x1="50" y1="65"  x2="350" y2="65"  stroke="white" stroke-width="3"/>
+    <line x1="50" y1="100" x2="350" y2="100" stroke="white" stroke-width="3"/>
+    <line x1="50" y1="135" x2="350" y2="135" stroke="white" stroke-width="3"/>
+    <line x1="50" y1="170" x2="350" y2="170" stroke="white" stroke-width="3"/>
+    <line x1="50" y1="205" x2="350" y2="205" stroke="white" stroke-width="3"/>
+    <line x1="50" y1="240" x2="350" y2="240" stroke="white" stroke-width="3"/>
+    <line x1="50" y1="275" x2="350" y2="275" stroke="white" stroke-width="3"/>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header>
+    <div class="logo-row">
+      <div class="logo-box">
+        <svg viewBox="0 0 20 20"><path d="M2 14h16v2H2zm1-4h2v3H3zm4 0h2v3H7zm4 0h2v3h-2zm4 0h2v3h-2zM3 6h14l1 4H2z"/></svg>
+      </div>
+      <span class="logo-txt">RAIL TRANSITION AI</span>
+      <span class="pw-badge">Powered by <span>DeepSeek</span></span>
+    </div>
+    <h1>铁道从业者职业转型顾问</h1>
+    <p class="sub">基于 AI 的个性化职业路径规划 · 专为土木铁道方向工程师定制</p>
+  </header>
+
+  <!-- 付款页 -->
+  <div id="pay-gate">
+    <div class="pay-card">
+      <div class="pay-title">解锁 AI 职业转型报告</div>
+
+      <div class="pay-price-row">
+        <span class="pay-price">0.9</span>
+        <span class="pay-price-unit">元 / 次</span>
+      </div>
+
+      <ul class="pay-features">
+        <li>AI 综合画像评估</li>
+        <li>3条定制转型路径</li>
+        <li>6-12个月行动计划</li>
+        <li>技能变现方案</li>
+        <li>年龄/性别专项建议</li>
+        <li>实用资源推荐</li>
+      </ul>
+
+      <div class="qr-box">
+        <img class="qr-img" src="alipay.png" alt="支付宝收款码"
+          onerror="this.style.display='none';document.getElementById('qr-fallback').style.display='flex'">
+        <div id="qr-fallback" class="qr-placeholder" style="display:none">
+          <svg viewBox="0 0 24 24"><path d="M3 3h7v7H3zm0 11h7v7H3zm11-11h7v7h-7zm-2 9h2v2h-2zm2 2h2v2h-2zm2 2h2v2h-2zm-4 2h2v2h-2zm2 2h2v2h-2zm2-2h2v2h-2zm2 2h2v2h-2z"/></svg>
+          <p>未找到 alipay.png</p>
+        </div>
+        <div class="qr-label">支付宝扫码付款</div>
+        <div class="qr-amount">¥0.9 元</div>
+      </div>
+
+      <div class="unlock-section">
+        <label class="unlock-label">
+          付款后请联系获取解锁码，输入下方解锁：
+        </label>
+        <div class="unlock-row">
+          <input type="text" id="code-input" placeholder="输入解锁码" maxlength="12" autocomplete="off">
+          <button class="unlock-btn" onclick="checkCode()">解锁</button>
+        </div>
+        <div class="unlock-err" id="unlock-err"></div>
+        <div class="unlock-hint">解锁码当次会话有效，关闭页面后需重新输入</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主表单 -->
+  <div id="form-area">
+    <div class="steps">
+      <div class="dot on" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <div class="dot" id="d4"></div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="s1" class="fi">
+      <div class="slabel">第一步 · 基本信息</div>
+      <div class="stitle">你是谁？</div>
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">年龄</label>
+          <div class="rrow">
+            <input type="range" id="age" min="18" max="55" value="30" step="1"
+              oninput="document.getElementById('agev').textContent=this.value+'岁'">
+            <span class="rv" id="agev">30岁</span>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">性别</label>
+          <select id="gender">
+            <option value="">请选择...</option>
+            <option>男</option><option>女</option><option>不便透露</option>
+          </select>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">目前或最近的职位</label>
+          <select id="job_title">
+            <option value="">请选择...</option>
+            <option>线路工程师（路基/轨道）</option>
+            <option>桥梁结构工程师</option>
+            <option>隧道工程师</option>
+            <option>施工项目经理</option>
+            <option>BIM/设计工程师</option>
+            <option>工程造价工程师</option>
+            <option>测量工程师</option>
+            <option>质量与安全工程师</option>
+            <option>监理工程师</option>
+            <option>科研/高校人员</option>
+            <option>其他土木铁道相关岗位</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">从业年限</label>
+          <div class="rrow">
+            <input type="range" id="yrs" min="0" max="35" value="5" step="1"
+              oninput="document.getElementById('yv').textContent=this.value+'年'">
+            <span class="rv" id="yv">5年</span>
+          </div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="fg">
+          <label class="fl">最高学历</label>
+          <select id="edu">
+            <option value="">请选择...</option>
+            <option>大专/高职</option><option>本科（工学）</option>
+            <option>硕士研究生</option><option>博士研究生</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label class="fl">所在地区</label>
+          <select id="region">
+            <option value="">请选择...</option>
+            <option>北京/上海/广州/深圳</option>
+            <option>杭州/南京/武汉/成都/西安等新一线</option>
+            <option>其他省会城市</option>
+            <option>三四线城市/县城</option>
+            <option>海外/港澳台</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">婚育状态</label>
+        <select id="family">
+          <option value="">不透露</option>
+          <option>单身，无顾虑</option>
+          <option>有伴侣，暂无子女</option>
+          <option>已育，需考虑家庭稳定性</option>
+          <option>计划近期生育</option>
+        </select>
+      </div>
+      <div class="brow">
+        <span class="pn">1 / 4</span>
+        <button class="btn bp" onclick="go(2)">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="s2" style="display:none">
+      <div class="slabel">第二步 · 性格与自我认知</div>
+      <div class="stitle">你是什么样的人？</div>
+      <div class="fg">
+        <label class="fl">MBTI 性格类型（不清楚可跳过）</label>
+        <select id="mbti">
+          <option value="">不清楚 / 跳过</option>
+          <optgroup label="分析型">
+            <option>INTJ — 建筑师</option><option>INTP — 逻辑学家</option>
+            <option>ENTJ — 指挥官</option><option>ENTP — 辩论家</option>
+          </optgroup>
+          <optgroup label="外交型">
+            <option>INFJ — 提倡者</option><option>INFP — 调停者</option>
+            <option>ENFJ — 主人公</option><option>ENFP — 竞选者</option>
+          </optgroup>
+          <optgroup label="哨兵型">
+            <option>ISTJ — 物流师</option><option>ISFJ — 守卫者</option>
+            <option>ESTJ — 总经理</option><option>ESFJ — 执政官</option>
+          </optgroup>
+          <optgroup label="探险型">
+            <option>ISTP — 鉴赏家</option><option>ISFP — 探险家</option>
+            <option>ESTP — 企业家</option><option>ESFP — 表演者</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">性格特征自评（可多选）</label>
+        <div class="chips" id="ch_personality">
+          <button class="chip" onclick="tc(this)">擅长沟通协调</button>
+          <button class="chip" onclick="tc(this)">偏好独立工作</button>
+          <button class="chip" onclick="tc(this)">逻辑分析强</button>
+          <button class="chip" onclick="tc(this)">创造力丰富</button>
+          <button class="chip" onclick="tc(this)">执行力强</button>
+          <button class="chip" onclick="tc(this)">抗压能力强</button>
+          <button class="chip" onclick="tc(this)">学习适应快</button>
+          <button class="chip" onclick="tc(this)">喜欢带团队</button>
+          <button class="chip" onclick="tc(this)">追求稳定</button>
+          <button class="chip" onclick="tc(this)">敢于冒险</button>
+          <button class="chip" onclick="tc(this)">注重细节</button>
+          <button class="chip" onclick="tc(this)">善于写作表达</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">工作风格偏好</label>
+        <select id="work_style">
+          <option value="">请选择...</option>
+          <option>办公室坐班，朝九晚六，不喜出差</option>
+          <option>弹性办公，重结果不重形式</option>
+          <option>可以出差，但希望有固定基地城市</option>
+          <option>远程/居家工作</option>
+          <option>长期驻外或海外项目也可以接受</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">你认为自己最大的职业优势（简述）</label>
+        <textarea id="strength" placeholder="例如：现场管理经验丰富，能协调设计、施工、监理等多方…"></textarea>
+      </div>
+      <div class="brow">
+        <button class="btn bg" onclick="go(1)">← 上一步</button>
+        <button class="btn bp" onclick="go(3)">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="s3" style="display:none">
+      <div class="slabel">第三步 · 技能与工作经历</div>
+      <div class="stitle">你做过什么？会什么？</div>
+      <div class="fg">
+        <label class="fl">工作经历亮点（可多选）</label>
+        <div class="chips" id="ch_experience">
+          <button class="chip" onclick="tc(this)">主持/参与大型工程项目（10亿+）</button>
+          <button class="chip" onclick="tc(this)">有高铁/城际铁路项目经验</button>
+          <button class="chip" onclick="tc(this)">有地铁/城轨项目经验</button>
+          <button class="chip" onclick="tc(this)">有跨海/超长隧道经验</button>
+          <button class="chip" onclick="tc(this)">曾担任项目负责人/总工</button>
+          <button class="chip" onclick="tc(this)">有对外汇报/业主沟通经验</button>
+          <button class="chip" onclick="tc(this)">发表过核心期刊/EI论文</button>
+          <button class="chip" onclick="tc(this)">参与过标准/规范编制</button>
+          <button class="chip" onclick="tc(this)">有国际项目经验</button>
+          <button class="chip" onclick="tc(this)">获得过省部级以上奖项</button>
+          <button class="chip" onclick="tc(this)">有创业或副业经历</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">专业技能（可多选）</label>
+        <div class="chips" id="ch_skills">
+          <button class="chip" onclick="tc(this)">AutoCAD / CAD制图</button>
+          <button class="chip" onclick="tc(this)">BIM / Revit / Civil 3D</button>
+          <button class="chip" onclick="tc(this)">有限元分析 (ANSYS/MIDAS)</button>
+          <button class="chip" onclick="tc(this)">项目管理 (PMP)</button>
+          <button class="chip" onclick="tc(this)">工程造价/概预算</button>
+          <button class="chip" onclick="tc(this)">施工组织与管理</button>
+          <button class="chip" onclick="tc(this)">Python / 数据分析</button>
+          <button class="chip" onclick="tc(this)">GIS / 地理信息</button>
+          <button class="chip" onclick="tc(this)">无人机操控/测量</button>
+          <button class="chip" onclick="tc(this)">英语（工作级）</button>
+          <button class="chip" onclick="tc(this)">现场管理与协调</button>
+          <button class="chip" onclick="tc(this)">科研/论文写作</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">持有证书（可多选）</label>
+        <div class="chips" id="ch_cert">
+          <button class="chip" onclick="tc(this)">注册建造师（一级）</button>
+          <button class="chip" onclick="tc(this)">注册建造师（二级）</button>
+          <button class="chip" onclick="tc(this)">注册结构工程师</button>
+          <button class="chip" onclick="tc(this)">注册岩土工程师</button>
+          <button class="chip" onclick="tc(this)">PMP 项目管理</button>
+          <button class="chip" onclick="tc(this)">造价工程师</button>
+          <button class="chip" onclick="tc(this)">监理工程师</button>
+          <button class="chip" onclick="tc(this)">高级工程师职称</button>
+          <button class="chip" onclick="tc(this)">MBA/研究生学历</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">当前月收入水平（可选）</label>
+        <select id="sal">
+          <option value="">不透露</option>
+          <option>8000元以下</option><option>8000–15000元</option>
+          <option>15000–25000元</option><option>25000元以上</option>
+        </select>
+      </div>
+      <div class="brow">
+        <button class="btn bg" onclick="go(2)">← 上一步</button>
+        <button class="btn bp" onclick="go(4)">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div id="s4" style="display:none">
+      <div class="slabel">第四步 · 转型诉求</div>
+      <div class="stitle">你想去哪里？为什么？</div>
+      <div class="fg">
+        <label class="fl">感兴趣的转型方向（可多选）</label>
+        <div class="chips" id="ch_interest">
+          <button class="chip" onclick="tc(this)">互联网/科技行业</button>
+          <button class="chip" onclick="tc(this)">数字化/智慧铁路</button>
+          <button class="chip" onclick="tc(this)">管理咨询/投资</button>
+          <button class="chip" onclick="tc(this)">房地产/建设开发</button>
+          <button class="chip" onclick="tc(this)">政府/国企体制内</button>
+          <button class="chip" onclick="tc(this)">自主创业</button>
+          <button class="chip" onclick="tc(this)">海外/国际工程</button>
+          <button class="chip" onclick="tc(this)">教育培训</button>
+          <button class="chip" onclick="tc(this)">金融/保险行业</button>
+          <button class="chip" onclick="tc(this)">尚不确定，需要建议</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">转型主要动机（可多选）</label>
+        <div class="chips" id="ch_motive">
+          <button class="chip" onclick="tc(this)">薪资偏低，想提升收入</button>
+          <button class="chip" onclick="tc(this)">工作强度大、出差多</button>
+          <button class="chip" onclick="tc(this)">行业前景不明朗</button>
+          <button class="chip" onclick="tc(this)">想换更有成就感的工作</button>
+          <button class="chip" onclick="tc(this)">想回到特定城市定居</button>
+          <button class="chip" onclick="tc(this)">渴望更好的晋升空间</button>
+          <button class="chip" onclick="tc(this)">对铁路行业本身失去兴趣</button>
+          <button class="chip" onclick="tc(this)">家庭/伴侣因素</button>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">愿意投入转型的时间</label>
+        <select id="ti">
+          <option value="">请选择...</option>
+          <option>越快越好（3个月内）</option>
+          <option>半年以内</option>
+          <option>1年左右慢慢规划</option>
+          <option>2年以上，边做边积累</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">补充说明（可选）</label>
+        <textarea id="note" placeholder="例如：我33岁，女，在高铁施工单位做了8年项目经理，想回成都找坐班工作…"></textarea>
+      </div>
+      <div id="err" class="err" style="display:none"></div>
+      <div class="brow">
+        <button class="btn bg" onclick="go(3)">← 上一步</button>
+        <button class="btn bp" onclick="run()">生成转型建议 ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 加载 -->
+  <div id="load" style="display:none">
+    <div class="load-wrap">
+      <div style="font-family:'Noto Serif SC',serif;font-size:20px;font-weight:600;margin-bottom:6px">正在深度分析你的情况</div>
+      <div style="font-size:13px;color:var(--con);margin-bottom:20px">DeepSeek 正在为你生成个性化转型方案</div>
+      <div class="load-rail"><div class="load-train"></div></div>
+      <div class="load-txt" id="ltxt">连接中...</div>
+    </div>
+  </div>
+
+  <!-- 结果 -->
+  <div id="res" style="display:none">
+    <div class="res-hdr">
+      <div>
+        <div class="slabel" style="margin-bottom:4px">分析完成</div>
+        <div style="font-family:'Noto Serif SC',serif;font-size:20px;font-weight:600">你的职业转型建议</div>
+      </div>
+      <span class="badge">DeepSeek · deepseek-chat</span>
+    </div>
+    <div class="panel"><div class="rc" id="rc"></div></div>
+    <div class="usage-bar" id="usage-bar" style="display:none">
+      输入：<span id="u-in">—</span> tokens | 输出：<span id="u-out">—</span> tokens
+    </div>
+    <div class="rt"><button class="btn bg" onclick="restart()">↺ 重新评估</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+/* ================================================================
+   !! 唯一需要修改的地方 !!
+   把下面的地址换成你的 Cloudflare Worker 地址
+   格式：https://你给worker起的名字.你的账号名.workers.dev
+   ================================================================ */
+var WORKER_URL = 'https://railadviser.joeyfany0.workers.dev';  // ← 部署完 Worker 后替换这里
+
+/* ================================================================
+   解锁码配置
+   ================================================================ */
+var VALID_CODES = {
+  '8888': 0,   // 0 = 永久有效；填时间戳则到期失效
+};
+
+/* ── 解锁逻辑 ── */
+function checkCode() {
+  var code = document.getElementById('code-input').value.trim().toUpperCase();
+  var errEl = document.getElementById('unlock-err');
+  if (!code) { errEl.textContent = '请输入解锁码'; return; }
+  if (VALID_CODES.hasOwnProperty(code)) {
+    var exp = VALID_CODES[code];
+    if (exp !== 0 && Date.now() > exp) { errEl.textContent = '解锁码已过期'; return; }
+    sessionStorage.setItem('rail_unlocked', '1');
+    document.getElementById('pay-gate').style.display = 'none';
+    var fa = document.getElementById('form-area');
+    fa.style.display = 'block'; fa.classList.add('fi');
+  } else {
+    errEl.textContent = '解锁码无效，请检查输入';
+    var inp = document.getElementById('code-input');
+    inp.style.borderColor = 'var(--red)';
+    setTimeout(function(){ inp.style.borderColor = ''; }, 1400);
+  }
+}
+document.getElementById('code-input').addEventListener('keydown', function(e){ if(e.key==='Enter') checkCode(); });
+if (sessionStorage.getItem('rail_unlocked')) {
+  document.getElementById('pay-gate').style.display = 'none';
+  document.getElementById('form-area').style.display = 'block';
+}
+
+/* ── 步骤导航 ── */
+var cur = 1;
+function go(n) {
+  if (n > cur) {
+    var req = {1:'job_title', 4:'ti'};
+    var id = req[cur];
+    if (id) {
+      var el = document.getElementById(id);
+      if (el && !el.value) {
+        el.style.borderColor = 'var(--red)';
+        setTimeout(function(){ el.style.borderColor=''; }, 1400);
+        return;
+      }
+    }
+  }
+  document.getElementById('s'+cur).style.display = 'none';
+  cur = n;
+  var el = document.getElementById('s'+n);
+  el.style.display = 'block';
+  el.classList.remove('fi'); void el.offsetWidth; el.classList.add('fi');
+  for (var i=1; i<=4; i++) {
+    var d = document.getElementById('d'+i);
+    d.className = 'dot';
+    if (i < n) d.classList.add('ok');
+    else if (i === n) d.classList.add('on');
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function tc(el){ el.classList.toggle('on'); }
+function gchips(id){
+  return Array.from(document.querySelectorAll('#'+id+' .chip.on'))
+    .map(function(c){ return c.textContent.trim(); }).join('、') || '未选择';
+}
+
+/* ── 调用 Cloudflare Worker（不含任何 API Key）── */
+async function run() {
+  var ti = document.getElementById('ti').value;
+  if (!ti) {
+    var el = document.getElementById('ti');
+    el.style.borderColor = 'var(--red)';
+    setTimeout(function(){ el.style.borderColor=''; }, 1400);
+    return;
+  }
+
+  var d = {
+    age:         document.getElementById('age').value + '岁',
+    gender:      document.getElementById('gender').value      || '未透露',
+    job:         document.getElementById('job_title').value,
+    years:       document.getElementById('yrs').value + '年',
+    edu:         document.getElementById('edu').value         || '未填写',
+    region:      document.getElementById('region').value      || '未填写',
+    family:      document.getElementById('family').value      || '未透露',
+    mbti:        document.getElementById('mbti').value        || '未知',
+    personality: gchips('ch_personality'),
+    work_style:  document.getElementById('work_style').value  || '未填写',
+    strength:    document.getElementById('strength').value    || '未填写',
+    experience:  gchips('ch_experience'),
+    skills:      gchips('ch_skills'),
+    certs:       gchips('ch_cert'),
+    salary:      document.getElementById('sal').value         || '未透露',
+    interests:   gchips('ch_interest'),
+    motives:     gchips('ch_motive'),
+    time:        ti,
+    note:        document.getElementById('note').value        || '无'
+  };
+
+  document.getElementById('form-area').style.display = 'none';
+  document.getElementById('load').style.display = 'block';
+  document.getElementById('err').style.display = 'none';
+
+  var msgs = ['连接 AI 服务...','分析你的个人画像...','结合年龄性别性格评估...','匹配最优转型路径...','撰写报告中...'];
+  var mi = 0;
+  var tick = setInterval(function(){ document.getElementById('ltxt').textContent = msgs[mi++%msgs.length]; }, 1800);
+
+  var systemPrompt = '你是一位在中国深耕15年的职业发展顾问，专注于工程行业（尤其铁路土木方向）的职业转型规划。你擅长结合个人年龄、性别、性格、家庭状况等综合因素给出有温度、有针对性的建议。你的建议务实、具体、可操作，熟悉国内各行业的实际薪酬水平和招聘生态。';
+
+  var userPrompt = [
+    '请根据以下用户的完整画像，生成一份深度职业转型建议报告（Markdown 格式，中文）。',
+    '',
+    '【用户画像】',
+    '- 年龄：'+d.age,'- 性别：'+d.gender,'- 当前职位：'+d.job,
+    '- 从业年限：'+d.years,'- 最高学历：'+d.edu,'- 所在地区：'+d.region,
+    '- 婚育状态：'+d.family,'- MBTI类型：'+d.mbti,'- 性格特征：'+d.personality,
+    '- 工作风格偏好：'+d.work_style,'- 自评最大优势：'+d.strength,
+    '- 工作经历亮点：'+d.experience,'- 专业技能：'+d.skills,
+    '- 持有证书：'+d.certs,'- 当前收入：'+d.salary,
+    '- 感兴趣方向：'+d.interests,'- 转型动机：'+d.motives,
+    '- 可投入时间：'+d.time,'- 补充说明：'+d.note,
+    '',
+    '## 一、综合画像评估',
+    '（结合年龄、性别、性格、家庭等因素，分析其处于职业生涯哪个阶段，核心优势与潜在制约，200-300字）',
+    '',
+    '## 二、推荐转型路径（Top 3）',
+    '（每条含：路径名称、迁移难度★☆、与其性格/背景匹配度说明、需补充技能/证书、预期月薪范围、6-12个月行动计划）',
+    '',
+    '## 三、技能与经历变现',
+    '（已有技能和经历如何在新领域直接套用，如何包装）',
+    '',
+    '## 四、年龄/性别/家庭因素的特别提示',
+    '（针对其具体情况的专项建议）',
+    '',
+    '## 五、风险提示与应对',
+    '（转型中的常见坑、误区和规避方法）',
+    '',
+    '## 六、实用资源推荐',
+    '（具体证书、学习平台、招聘渠道、专业社群、书单）',
+    '',
+    '语气专业温暖，不说废话，结合中国市场实际。'
+  ].join('\n');
+
+  try {
+    /* 请求发往 Cloudflare Worker，不携带任何 API Key */
+    var resp = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user',   content: userPrompt   }
+        ],
+        max_tokens:  3000,
+        temperature: 1.0
+      })
+    });
+
+    clearInterval(tick);
+
+    if (!resp.ok) {
+      var eb = await resp.text();
+      throw new Error('Worker 返回 HTTP ' + resp.status + ': ' + eb.substring(0, 200));
+    }
+
+    var json = await resp.json();
+    var text = (json.choices && json.choices[0]) ? json.choices[0].message.content : '（无返回内容，请重试）';
+
+    document.getElementById('load').style.display = 'none';
+    var resEl = document.getElementById('res');
+    resEl.style.display = 'block';
+    resEl.classList.remove('fi'); void resEl.offsetWidth; resEl.classList.add('fi');
+    document.getElementById('rc').innerHTML = marked.parse(text);
+
+    if (json.usage) {
+      document.getElementById('u-in').textContent  = json.usage.prompt_tokens;
+      document.getElementById('u-out').textContent = json.usage.completion_tokens;
+      document.getElementById('usage-bar').style.display = 'block';
+    }
+
+  } catch (err) {
+    clearInterval(tick);
+    document.getElementById('load').style.display = 'none';
+    document.getElementById('form-area').style.display = 'block';
+    go(4);
+    var errEl = document.getElementById('err');
+    errEl.style.display = 'block';
+    errEl.innerHTML = '<strong>请求失败：</strong>' + err.message +
+      '<br><br>排查：① 确认 WORKER_URL 已填写正确 ② Worker 是否正常部署 ③ Worker 环境变量 DEEPSEEK_API_KEY 是否设置';
+  }
+}
+
+function restart() {
+  document.getElementById('res').style.display = 'none';
+  document.getElementById('form-area').style.display = 'block';
+  document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
+  ['strength','note'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('err').style.display = 'none';
+  go(1);
+}
+</script>
+</body>
+</html>
