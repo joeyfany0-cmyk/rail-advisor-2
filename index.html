@@ -178,14 +178,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
 
       <div class="unlock-section">
         <label class="unlock-label">
-          付款后请联系获取解锁码，输入下方解锁：
+          付款后请留意<strong style="color:var(--amber)">支付宝消息通知</strong>，解锁码将发送至支付宝站内信，<strong style="color:var(--amber)">有效期 1 小时</strong>，请及时使用：
         </label>
         <div class="unlock-row">
           <input type="text" id="code-input" placeholder="输入解锁码" maxlength="12" autocomplete="off">
           <button class="unlock-btn" onclick="checkCode()">解锁</button>
         </div>
         <div class="unlock-err" id="unlock-err"></div>
-        <div class="unlock-hint">解锁码当次会话有效，关闭页面后需重新输入</div>
+        <div class="unlock-hint">解锁码 1 小时内有效 · 当次会话可重复使用 · 关闭页面后需重新输入</div>
       </div>
     </div>
   </div>
@@ -374,15 +374,29 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
           <button class="chip" onclick="tc(this)">AutoCAD / CAD制图</button>
           <button class="chip" onclick="tc(this)">BIM / Revit / Civil 3D</button>
           <button class="chip" onclick="tc(this)">有限元分析 (ANSYS/MIDAS)</button>
-          <button class="chip" onclick="tc(this)">项目管理 (PMP)</button>
+          <button class="chip" onclick="tc(this)">Navisworks 碰撞检测</button>
+          <button class="chip" onclick="tc(this)">Tekla 钢结构建模</button>
+          <button class="chip" onclick="tc(this)">CATIA / 参数化设计</button>
           <button class="chip" onclick="tc(this)">工程造价/概预算</button>
+          <button class="chip" onclick="tc(this)">广联达/斯维尔算量</button>
           <button class="chip" onclick="tc(this)">施工组织与管理</button>
+          <button class="chip" onclick="tc(this)">项目进度/成本管控</button>
+          <button class="chip" onclick="tc(this)">合同管理/索赔</button>
           <button class="chip" onclick="tc(this)">Python / 数据分析</button>
-          <button class="chip" onclick="tc(this)">GIS / 地理信息</button>
-          <button class="chip" onclick="tc(this)">无人机操控/测量</button>
-          <button class="chip" onclick="tc(this)">英语（工作级）</button>
+          <button class="chip" onclick="tc(this)">Excel VBA / 数据处理</button>
+          <button class="chip" onclick="tc(this)">GIS / ArcGIS / 地理信息</button>
+          <button class="chip" onclick="tc(this)">无人机操控/倾斜摄影</button>
+          <button class="chip" onclick="tc(this)">三维激光扫描/点云处理</button>
+          <button class="chip" onclick="tc(this)">物联网 / 智慧工地系统</button>
           <button class="chip" onclick="tc(this)">现场管理与协调</button>
+          <button class="chip" onclick="tc(this)">安全生产管理</button>
+          <button class="chip" onclick="tc(this)">质量检测与验收</button>
           <button class="chip" onclick="tc(this)">科研/论文写作</button>
+          <button class="chip" onclick="tc(this)">标书/招投标文件编制</button>
+          <button class="chip" onclick="tc(this)">英语读写（工作级）</button>
+          <button class="chip" onclick="tc(this)">英语口语（工作级）</button>
+          <button class="chip" onclick="tc(this)">PPT/演示汇报</button>
+          <button class="chip" onclick="tc(this)">团队管理/带徒经验</button>
         </div>
       </div>
       <div class="fg">
@@ -392,11 +406,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
           <button class="chip" onclick="tc(this)">注册建造师（二级）</button>
           <button class="chip" onclick="tc(this)">注册结构工程师</button>
           <button class="chip" onclick="tc(this)">注册岩土工程师</button>
-          <button class="chip" onclick="tc(this)">PMP 项目管理</button>
-          <button class="chip" onclick="tc(this)">造价工程师</button>
+          <button class="chip" onclick="tc(this)">注册咨询工程师</button>
+          <button class="chip" onclick="tc(this)">注册城乡规划师</button>
+          <button class="chip" onclick="tc(this)">注册安全工程师</button>
+          <button class="chip" onclick="tc(this)">注册测绘师</button>
+          <button class="chip" onclick="tc(this)">造价工程师（一级）</button>
+          <button class="chip" onclick="tc(this)">造价工程师（二级）</button>
           <button class="chip" onclick="tc(this)">监理工程师</button>
+          <button class="chip" onclick="tc(this)">PMP 项目管理</button>
           <button class="chip" onclick="tc(this)">高级工程师职称</button>
-          <button class="chip" onclick="tc(this)">MBA/研究生学历</button>
+          <button class="chip" onclick="tc(this)">正高级工程师职称</button>
+          <button class="chip" onclick="tc(this)">计算机二级（办公/编程）</button>
+          <button class="chip" onclick="tc(this)">软件设计师/系统分析师</button>
+          <button class="chip" onclick="tc(this)">BIM 等级证书</button>
+          <button class="chip" onclick="tc(this)">CFA / 基金从业资格</button>
+          <button class="chip" onclick="tc(this)">英语四级 / 六级</button>
+          <button class="chip" onclick="tc(this)">雅思 / 托福</button>
+          <button class="chip" onclick="tc(this)">MBA / 管理类硕士</button>
+          <button class="chip" onclick="tc(this)">安全生产管理证</button>
         </div>
       </div>
       <div class="fg">
@@ -474,6 +501,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;heigh
       <div style="font-size:13px;color:var(--con);margin-bottom:20px">DeepSeek 正在为你生成个性化转型方案</div>
       <div class="load-rail"><div class="load-train"></div></div>
       <div class="load-txt" id="ltxt">连接中...</div>
+      <div style="margin-top:14px;display:flex;align-items:center;justify-content:center;gap:10px">
+        <div style="font-size:12px;color:var(--con)">预计剩余时间</div>
+        <div id="countdown" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:600;color:var(--amber);min-width:48px;text-align:center">30s</div>
+      </div>
+      <div style="width:220px;height:3px;background:var(--steel-l);border-radius:2px;margin:10px auto 0;overflow:hidden">
+        <div id="progress-bar" style="height:100%;background:var(--teal-l);border-radius:2px;width:0%;transition:width 1s linear"></div>
+      </div>
     </div>
   </div>
 
@@ -609,6 +643,20 @@ async function run() {
   var mi = 0;
   var tick = setInterval(function(){ document.getElementById('ltxt').textContent = msgs[mi++%msgs.length]; }, 1800);
 
+  /* 倒计时 & 进度条（预估 30 秒） */
+  var ESTIMATE = 30;
+  var elapsed  = 0;
+  var cdEl  = document.getElementById('countdown');
+  var pbEl  = document.getElementById('progress-bar');
+  var cdTick = setInterval(function(){
+    elapsed++;
+    var remain = Math.max(0, ESTIMATE - elapsed);
+    cdEl.textContent = remain > 0 ? remain + 's' : '即将完成...';
+    cdEl.style.color  = remain <= 5 ? 'var(--teal-l)' : 'var(--amber)';
+    var pct = Math.min(100, Math.round(elapsed / ESTIMATE * 100));
+    pbEl.style.width = pct + '%';
+  }, 1000);
+
   var systemPrompt = '你是一位在中国深耕15年的职业发展顾问，专注于工程行业（尤其铁路土木方向）的职业转型规划。你擅长结合个人年龄、性别、性格、家庭状况等综合因素给出有温度、有针对性的建议。你的建议务实、具体、可操作，熟悉国内各行业的实际薪酬水平和招聘生态。';
 
   var userPrompt = [
@@ -660,7 +708,7 @@ async function run() {
       })
     });
 
-    clearInterval(tick);
+    clearInterval(tick); clearInterval(cdTick);
 
     if (!resp.ok) {
       var eb = await resp.text();
@@ -683,7 +731,7 @@ async function run() {
     }
 
   } catch (err) {
-    clearInterval(tick);
+    clearInterval(tick); clearInterval(cdTick);
     document.getElementById('load').style.display = 'none';
     document.getElementById('form-area').style.display = 'block';
     go(4);
@@ -695,6 +743,9 @@ async function run() {
 }
 
 function restart() {
+  document.getElementById('countdown').textContent = '30s';
+  document.getElementById('countdown').style.color = 'var(--amber)';
+  document.getElementById('progress-bar').style.width = '0%';
   document.getElementById('res').style.display = 'none';
   document.getElementById('form-area').style.display = 'block';
   document.querySelectorAll('.chip.on').forEach(function(c){ c.classList.remove('on'); });
